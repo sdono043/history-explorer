@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { REVOLUTIONARY_BATTLES } from './data'
+import { STATE_OUTLINES } from './usStatesOutline'
 import './BattleMap.css'
 
 const LON_MIN = -83, LON_MAX = -68
@@ -8,13 +9,10 @@ const LON_SPAN = LON_MAX - LON_MIN
 const LAT_SPAN = LAT_MAX - LAT_MIN
 const PLAY_INTERVAL_MS = 2400
 
-// Projects lat/lon into the map's SVG coordinate space (viewBox 0 0 LON_SPAN LAT_SPAN)
+// Projects lat/lon into the map's SVG coordinate space (viewBox 0 0 LON_SPAN LAT_SPAN) —
+// the same projection used to pre-compute STATE_OUTLINES' paths and centroids.
 function project(lat, lon) {
   return { x: lon - LON_MIN, y: LAT_MAX - lat }
-}
-// Same projection as a percentage, for the HTML label overlay
-function projectPct(lat, lon) {
-  return { x: ((lon - LON_MIN) / LON_SPAN) * 100, y: ((LAT_MAX - lat) / LAT_SPAN) * 100 }
 }
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value))
@@ -27,17 +25,8 @@ function battlePoint(battle) {
   return { x: x + offset.dx, y: y + offset.dy }
 }
 
-const REGION_LABELS = [
-  { label: 'MASSACHUSETTS', lat: 42.5, lon: -71.9 },
-  { label: 'NEW YORK', lat: 43.3, lon: -76.0 },
-  { label: 'NEW JERSEY', lat: 39.9, lon: -74.9 },
-  { label: 'VIRGINIA', lat: 37.7, lon: -78.9 },
-  { label: 'THE CAROLINAS', lat: 34.7, lon: -81.3 },
-  { label: 'GEORGIA', lat: 32.2, lon: -82.2 },
-]
-
-const GRID_LATS = [32, 34, 36, 38, 40, 42, 44]
-const GRID_LONS = [-82, -80, -78, -76, -74, -72, -70]
+// States where one of the mapped battles took place, for a slightly brighter label
+const BATTLE_STATES = new Set(['MA', 'NY', 'NJ', 'VA', 'NC', 'SC', 'GA'])
 
 export default function BattleMap() {
   const [index, setIndex] = useState(0)
@@ -95,13 +84,24 @@ export default function BattleMap() {
       <div className="battle-map-layout">
         <div className="battle-map-canvas">
           <svg viewBox={`0 0 ${LON_SPAN} ${LAT_SPAN}`} className="battle-map-svg">
-            {GRID_LONS.map(lon => {
-              const { x } = project(40, lon)
-              return <line key={`lon-${lon}`} x1={x} y1={0} x2={x} y2={LAT_SPAN} className="grid-line" />
-            })}
-            {GRID_LATS.map(lat => {
-              const { y } = project(lat, -75)
-              return <line key={`lat-${lat}`} x1={0} y1={y} x2={LON_SPAN} y2={y} className="grid-line" />
+            {STATE_OUTLINES.map(s => (
+              <path key={s.name} d={s.d} className="state-outline" />
+            ))}
+            {STATE_OUTLINES.map(s => {
+              // Keep labels clear of the canvas edges so they never get clipped on narrow screens
+              const x = clamp(s.cx, 0.9, LON_SPAN - 0.9)
+              const y = clamp(s.cy, 0.6, LAT_SPAN - 0.4)
+              return (
+                <text
+                  key={s.name}
+                  x={x}
+                  y={y}
+                  textAnchor="middle"
+                  className={`state-label mono ${BATTLE_STATES.has(s.abbrev) ? 'battle-state' : ''}`}
+                >
+                  {s.abbrev}
+                </text>
+              )
             })}
 
             {visited.length > 1 && <polyline points={pathPoints} className="battle-path" />}
@@ -122,20 +122,6 @@ export default function BattleMap() {
               )
             })}
           </svg>
-
-          <div className="battle-map-labels">
-            {REGION_LABELS.map(r => {
-              const { x, y } = projectPct(r.lat, r.lon)
-              // Keep labels clear of the canvas edges so they never get clipped on narrow screens
-              const safeX = clamp(x, 12, 88)
-              const safeY = clamp(y, 6, 94)
-              return (
-                <span key={r.label} className="region-label mono" style={{ left: `${safeX}%`, top: `${safeY}%` }}>
-                  {r.label}
-                </span>
-              )
-            })}
-          </div>
         </div>
 
         <div className="battle-detail">
