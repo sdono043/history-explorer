@@ -114,7 +114,8 @@ export default function EarlyUsHistory() {
                 {PRESIDENTS.map((pres, i) => {
                   const left = yearToPercent(pres.years[0])
                   const right = yearToPercent(pres.years[1])
-                  const width = Math.max(right - left, 0.6)
+                  const duration = pres.years[1] - pres.years[0]
+                  const width = Math.max(right - left, 0.9)
                   const party = partyFor(pres.party)
                   const isSelected = selected?.id === pres.id
                   const era = ERAS.find(e => e.id === activeEra)
@@ -127,6 +128,11 @@ export default function EarlyUsHistory() {
                         left: `${left}%`,
                         width: `calc(${width}% - 1px)`,
                         background: i % 2 === 0 ? party.color : `${party.color}cc`,
+                        // Very short terms (e.g. W.H. Harrison's 31 days) get clamped up to the
+                        // minimum width above and can end up spatially overlapping a neighboring
+                        // bar that starts at the same year — keep short terms on top so they stay
+                        // clickable instead of being fully covered by that neighbor.
+                        zIndex: Math.max(1, Math.round(10 - duration)),
                       }}
                       onClick={() => handleSelect({ ...pres, kind: 'president' })}
                       title={`${pres.name} · ${pres.years[0]}–${pres.years[1]}`}

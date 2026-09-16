@@ -137,12 +137,14 @@
   transition: opacity 0.2s, filter 0.15s;
   opacity: 0.88;
 }
-.eus-leader-bar:hover { opacity: 1; filter: brightness(1.25); z-index: 10; }
+/* !important: bars also carry an inline z-index (by term length, see EarlyUsHistory.jsx)
+   so short terms stay on top of overlapping neighbors; hover/selected must still win over that. */
+.eus-leader-bar:hover { opacity: 1; filter: brightness(1.25); z-index: 50 !important; }
 .eus-leader-bar.selected {
   opacity: 1;
   outline: 2px solid var(--brass);
   outline-offset: 1px;
-  z-index: 20;
+  z-index: 60 !important;
   filter: brightness(1.2);
 }
 .eus-leader-bar.dimmed { opacity: 0.15; }
