@@ -1,0 +1,375 @@
+/* ===== APP SHELL ===== */
+.eus-app { min-height: 100vh; background: var(--navy); }
+
+/* ===== HEADER ===== */
+.eus-site-header {
+  background: linear-gradient(180deg, #0a1520 0%, var(--navy-mid) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 48px 32px;
+}
+.eus-header-inner {
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.eus-header-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--brass);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.eus-header-text h1 {
+  font-size: 2.8rem;
+  color: var(--parchment);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.eus-header-sub { color: var(--text-muted); font-size: 1rem; }
+
+.eus-era-pills { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; }
+.eus-era-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.eus-era-pill:hover { border-color: var(--brass); color: var(--parchment); }
+.eus-era-pill.active { background: rgba(201,160,80,0.1); border-color: var(--brass); color: var(--brass); }
+.eus-era-pill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.eus-era-pill-years { font-size: 0.72rem; color: var(--text-muted); margin-left: 2px; }
+
+/* ===== TIMELINE ===== */
+.eus-timeline-section {
+  padding-bottom: 24px;
+  background: var(--navy-mid);
+  border-bottom: 1px solid var(--border);
+}
+.eus-timeline-scroll { overflow-x: auto; padding: 24px 48px 0; }
+.eus-timeline-container {
+  min-width: 960px;
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.eus-tl-row { display: flex; align-items: stretch; gap: 12px; }
+.eus-tl-label {
+  width: 100px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: right;
+}
+.eus-tl-track { flex: 1; position: relative; }
+
+/* ── Era bands ── */
+.eus-era-bands-track { height: 46px; }
+.eus-era-band {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-top: 3px solid;
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 8px 5px;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+.eus-era-band:hover { background: rgba(255,255,255,0.05); }
+.eus-era-band.active { background: rgba(255,255,255,0.06); }
+.eus-era-band.dimmed { opacity: 0.4; }
+.eus-era-band-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ── Year axis ── */
+.eus-year-axis-track { height: 26px; }
+.eus-year-tick { position: absolute; transform: translateX(-50%); }
+.eus-tick-line { width: 1px; height: 8px; background: var(--border); margin: 0 auto; }
+.eus-tick-label {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  text-align: center;
+  white-space: nowrap;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ── Presidents row ── */
+.eus-president-tl-row { margin-top: 3px; }
+.eus-president-track { height: 22px; background: rgba(255,255,255,0.015); border-radius: 2px; }
+
+.eus-leader-bar {
+  position: absolute;
+  top: 1px;
+  height: 20px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  transition: opacity 0.2s, filter 0.15s;
+  opacity: 0.88;
+}
+.eus-leader-bar:hover { opacity: 1; filter: brightness(1.25); z-index: 10; }
+.eus-leader-bar.selected {
+  opacity: 1;
+  outline: 2px solid var(--brass);
+  outline-offset: 1px;
+  z-index: 20;
+  filter: brightness(1.2);
+}
+.eus-leader-bar.dimmed { opacity: 0.15; }
+.eus-leader-bar-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  color: rgba(255,255,255,0.92);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+/* ── Wars row ── */
+.eus-track-section-label {
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.eus-wars-track { height: 46px; margin-top: 10px; position: relative; }
+.eus-war-bar {
+  position: absolute;
+  height: 11px;
+  background: linear-gradient(90deg, #7a1414, #a02020);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  opacity: 0.8;
+  cursor: default;
+  transition: opacity 0.15s;
+}
+.eus-war-bar:hover { opacity: 1; z-index: 5; }
+.eus-war-bar-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.5rem;
+  color: rgba(255,200,200,0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+/* ── Event dots row ── */
+.eus-dots-track { height: 72px; margin-top: 8px; }
+.eus-event-dot {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+.eus-event-dot::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+  border: 2px solid;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.eus-event-dot.protest::before  { border-color: #e0a06e; background: #b05a00; }
+.eus-event-dot.battle::before   { border-color: #e07070; background: var(--conflict); }
+.eus-event-dot.political::before { border-color: var(--trade-light); background: var(--trade); }
+.eus-event-dot:hover::before   { transform: scale(1.5); box-shadow: 0 0 8px rgba(255,255,255,0.3); }
+.eus-event-dot.selected::before { transform: scale(1.6); box-shadow: 0 0 12px var(--brass); border-color: var(--brass); }
+.eus-event-dot.dimmed { opacity: 0.15; }
+
+.eus-dot-year { font-size: 0.54rem; color: var(--text-muted); margin-top: 3px; white-space: nowrap; }
+.eus-dot-label {
+  display: none;
+  font-size: 0.58rem;
+  color: var(--parchment);
+  white-space: nowrap;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  line-height: 1.2;
+  background: rgba(13,27,42,0.95);
+  padding: 2px 5px;
+  border-radius: 2px;
+  z-index: 30;
+}
+.eus-event-dot:hover .eus-dot-label,
+.eus-event-dot.selected .eus-dot-label { display: block; }
+
+/* ── Legend ── */
+.eus-timeline-legend-row { margin-top: 14px; padding-bottom: 8px; }
+.eus-timeline-legend { display: flex; gap: 20px; flex-wrap: wrap; }
+.eus-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--text-muted); }
+.eus-legend-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid; }
+.eus-legend-dot.protest    { background: #b05a00; border-color: #e0a06e; }
+.eus-legend-dot.battle     { background: var(--conflict); border-color: #e07070; }
+.eus-legend-dot.political  { background: var(--trade); border-color: var(--trade-light); }
+.eus-legend-war-bar {
+  width: 22px; height: 8px; border-radius: 2px;
+  background: linear-gradient(90deg, #7a1414, #a02020);
+  display: inline-block;
+}
+.eus-legend-leader-bar { width: 22px; height: 8px; border-radius: 2px; background: #4a6fa5; display: inline-block; }
+
+/* ===== DETAIL PANEL ===== */
+.eus-detail-panel {
+  background: linear-gradient(90deg, var(--navy-light) 0%, var(--navy-mid) 100%);
+  border-bottom: 1px solid var(--border);
+  border-top: 2px solid var(--brass);
+  padding: 32px 48px;
+}
+.eus-detail-inner { max-width: 900px; margin: 0 auto; position: relative; }
+.eus-detail-close {
+  position: absolute;
+  top: 0; right: 0;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+.eus-detail-close:hover { color: var(--parchment); border-color: var(--brass); }
+.eus-detail-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.eus-detail-type-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+.eus-detail-type-badge.protest   { background: rgba(176,90,0,0.25);   color: #e0a06e; border-color: #b05a00; }
+.eus-detail-type-badge.battle    { background: rgba(139,26,26,0.3);   color: #e07070; border-color: var(--conflict); }
+.eus-detail-type-badge.political { background: rgba(42,92,69,0.3);    color: var(--trade-light); border-color: var(--trade); }
+.eus-detail-type-badge.president-badge { background: rgba(255,255,255,0.05); }
+.eus-detail-year { font-size: 0.9rem; color: var(--brass); font-family: 'Space Mono', monospace; }
+.eus-detail-era-tag { font-size: 0.75rem; }
+.eus-detail-title { font-size: 1.8rem; color: var(--parchment); margin-bottom: 8px; line-height: 1.2; }
+.eus-detail-role  { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; }
+.eus-detail-body  { color: rgba(232,220,200,0.85); line-height: 1.75; font-size: 0.97rem; }
+
+/* ===== BATTLE MAP SECTION ===== */
+.eus-map-section { padding: 48px; background: var(--navy); border-bottom: 1px solid var(--border); }
+.eus-map-inner { max-width: 1500px; margin: 0 auto; }
+
+/* ===== SHARED SECTION HEADERS ===== */
+.eus-section-title { font-size: 1.5rem; color: var(--parchment); margin-bottom: 6px; }
+.eus-section-sub   { font-family: 'Source Sans 3', sans-serif; font-weight: 300; font-size: 1rem; color: var(--text-muted); }
+.eus-section-desc  { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; }
+
+/* ===== LISTS SECTION ===== */
+.eus-lists-section { padding: 48px; background: var(--navy-mid); }
+.eus-lists-inner   { max-width: 1500px; margin: 0 auto; }
+.eus-list-tabs     { display: flex; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+.eus-list-tab {
+  padding: 10px 24px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+.eus-list-tab:hover { color: var(--parchment); }
+.eus-list-tab.active { color: var(--brass); border-bottom-color: var(--brass); }
+
+.eus-event-list, .eus-figure-list { display: flex; flex-direction: column; gap: 8px; }
+.eus-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  width: 100%;
+}
+.eus-list-item:hover  { border-color: var(--brass); background: rgba(201,160,80,0.04); }
+.eus-list-item.selected { border-color: var(--brass); background: rgba(201,160,80,0.08); }
+
+.eus-list-item-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+.eus-list-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid; }
+.eus-list-dot.protest   { background: #b05a00; border-color: #e0a06e; }
+.eus-list-dot.battle    { background: var(--conflict); border-color: #e07070; }
+.eus-list-dot.political { background: var(--trade); border-color: var(--trade-light); }
+.eus-list-bar  { width: 22px; height: 6px; border-radius: 3px; display: block; }
+.eus-list-year { font-size: 0.7rem; color: var(--brass); font-family: 'Space Mono', monospace; }
+
+.eus-list-item-body { flex: 1; }
+.eus-list-item-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--parchment); margin-bottom: 3px; }
+.eus-list-item-role  { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px; }
+.eus-list-item-preview { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+.eus-list-item-era   { font-size: 0.72rem; white-space: nowrap; align-self: flex-start; margin-top: 2px; }
+
+/* ===== FOOTER ===== */
+.eus-site-footer { background: #080f18; border-top: 1px solid var(--border); padding: 24px 48px; }
+.eus-footer-inner { max-width: 1500px; margin: 0 auto; display: flex; flex-direction: column; gap: 4px; }
+.eus-site-footer p { color: var(--text-muted); font-size: 0.82rem; }
+.eus-footer-meta   { font-size: 0.72rem !important; color: var(--brass) !important; opacity: 0.6; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .eus-site-header, .eus-map-section, .eus-lists-section, .eus-detail-panel, .eus-site-footer { padding: 28px 20px; }
+  .eus-timeline-scroll { padding: 16px 16px 0; }
+  .eus-header-inner { flex-direction: column; gap: 20px; }
+  .eus-header-text h1 { font-size: 1.8rem; }
+  .eus-tl-label { width: 70px; font-size: 0.52rem; }
+}
