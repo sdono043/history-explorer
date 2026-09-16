@@ -16,6 +16,9 @@ function project(lat, lon) {
 function projectPct(lat, lon) {
   return { x: ((lon - LON_MIN) / LON_SPAN) * 100, y: ((LAT_MAX - lat) / LAT_SPAN) * 100 }
 }
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value))
+}
 // A battle's plotted point, nudged by its optional mapOffset to separate markers
 // that would otherwise sit on top of each other (e.g. Lexington & Bunker Hill).
 function battlePoint(battle) {
@@ -30,7 +33,7 @@ const REGION_LABELS = [
   { label: 'NEW JERSEY', lat: 39.9, lon: -74.9 },
   { label: 'VIRGINIA', lat: 37.7, lon: -78.9 },
   { label: 'THE CAROLINAS', lat: 34.7, lon: -81.3 },
-  { label: 'GEORGIA', lat: 32.2, lon: -83.7 },
+  { label: 'GEORGIA', lat: 32.2, lon: -82.2 },
 ]
 
 const GRID_LATS = [32, 34, 36, 38, 40, 42, 44]
@@ -123,8 +126,11 @@ export default function BattleMap() {
           <div className="battle-map-labels">
             {REGION_LABELS.map(r => {
               const { x, y } = projectPct(r.lat, r.lon)
+              // Keep labels clear of the canvas edges so they never get clipped on narrow screens
+              const safeX = clamp(x, 12, 88)
+              const safeY = clamp(y, 6, 94)
               return (
-                <span key={r.label} className="region-label mono" style={{ left: `${x}%`, top: `${y}%` }}>
+                <span key={r.label} className="region-label mono" style={{ left: `${safeX}%`, top: `${safeY}%` }}>
                   {r.label}
                 </span>
               )

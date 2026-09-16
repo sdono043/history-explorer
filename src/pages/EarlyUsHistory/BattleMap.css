@@ -141,4 +141,5 @@
 }
 @media (max-width: 768px) {
   .battle-map { padding: 14px; }
+  .region-label { font-size: 0.5rem; }
 }
